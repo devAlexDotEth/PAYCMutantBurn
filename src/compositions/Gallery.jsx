@@ -14,9 +14,10 @@ import Body from "../components/body";
 
 const Gallery = () => {
   const [isRevealed, setIsRevealed] = useState(false);
-  const [showDialog, setShowDialog] = useState(false); // New state for dialog visibility
+  const [showDialog, setShowDialog] = useState(false);
   const [currentSignerAddress, setCurrentSignerAddress] = useState(null);
   const { connectWallet, fetchUnstakedInfo } = useContext(BlockchainContext);
+  const [transactionSuccess, setTransactionSuccess] = useState(false);
 
   async function handleConnectWallet() {
     let signer = await connectWallet();
@@ -47,7 +48,7 @@ const Gallery = () => {
 
   const stakeHandler = async () => {
     if (selectedTokenIds.length < 5) {
-      setShowDialog(true); // Show the dialog if less than 5 NFTs are selected
+      setShowDialog(true);
       return;
     }
 
@@ -58,6 +59,7 @@ const Gallery = () => {
     }
     console.log("nfts to stake ", nfts_);
     await stake(nfts_);
+    setTransactionSuccess(true); // Set to true on successful transaction
   };
 
   async function getUserNFTs() {
@@ -77,6 +79,13 @@ const Gallery = () => {
         height: isRevealed && "100vh",
       }}
     >
+      {/* Animation for successful transaction */}
+      {transactionSuccess && (
+        <div className="animation-background">
+          <img src="background.gif" alt="Success Animation" />
+        </div>
+      )}
+
       <Navigation
         localStyles={{ position: "fixed", top: 0 }}
         wallet={
@@ -116,7 +125,6 @@ const Gallery = () => {
         </Dialog>
       )}
 
-      {/* New Dialog for less than 5 NFTs selected */}
       {showDialog && (
         <Dialog
           backdropClose={() => setShowDialog(false)}
@@ -133,7 +141,6 @@ const Gallery = () => {
         </Dialog>
       )}
 
-      {/* Popover Exchanging */}
       <Popup showPopup={showPopup} setShowPopup={setShowPopup} />
 
       <Portal
