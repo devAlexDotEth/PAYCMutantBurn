@@ -14,8 +14,10 @@ import Body from "../components/body";
 
 const Gallery = () => {
   const [isRevealed, setIsRevealed] = useState(false);
+  const [showDialog, setShowDialog] = useState(false); // New state for dialog visibility
   const [currentSignerAddress, setCurrentSignerAddress] = useState(null);
   const { connectWallet, fetchUnstakedInfo } = useContext(BlockchainContext);
+
   async function handleConnectWallet() {
     let signer = await connectWallet();
     if (!signer) {
@@ -43,10 +45,12 @@ const Gallery = () => {
     setNftType(type);
   };
 
-  {
-    /* ALEX NOTES: How do we deprecate this popover and replace with our own? */
-  }
   const stakeHandler = async () => {
+    if (selectedTokenIds.length < 5) {
+      setShowDialog(true); // Show the dialog if less than 5 NFTs are selected
+      return;
+    }
+
     let nfts_ = [];
     for (let i = 0; i < selectedTokenIds.length; i++) {
       const element = selectedTokenIds[i];
@@ -54,24 +58,18 @@ const Gallery = () => {
     }
     console.log("nfts to stake ", nfts_);
     await stake(nfts_);
-
-    // if (selectedTokenIds.length !== 1) {
-    //   setIsRevealed(true);
-    // } else {
-
-    //   if (val === 1) {
-    //     setShowPopup(true);
-    //   }
-    // }
   };
 
   async function getUserNFTs() {
     let _nfts = await fetchUnstakedInfo();
   }
+
   useEffect(() => {
     getUserNFTs();
   }, [currentSignerAddress]);
+
   console.log({ selectedTokenIds });
+
   return (
     <Box
       localStyles={{
@@ -87,7 +85,6 @@ const Gallery = () => {
               Connect Wallet
             </Button>
           ) : (
-            // ALEX NOTES: Are there any API's we can call to add balance / address?
             <Wallet balance={0.0389} address={currentSignerAddress} />
           )
         }
@@ -118,6 +115,24 @@ const Gallery = () => {
           </Button>
         </Dialog>
       )}
+
+      {/* New Dialog for less than 5 NFTs selected */}
+      {showDialog && (
+        <Dialog
+          backdropClose={() => setShowDialog(false)}
+          image={DialogHeader}
+        >
+          <Body size="L">Sheesh! Please select 5 NFT's</Body>
+          <Button
+            size="M"
+            variant="PRIMARY"
+            onClick={() => setShowDialog(false)}
+          >
+            Ok
+          </Button>
+        </Dialog>
+      )}
+
       {/* Popover Exchanging */}
       <Popup showPopup={showPopup} setShowPopup={setShowPopup} />
 
@@ -125,10 +140,7 @@ const Gallery = () => {
         title="Mutant Burn"
         toolbar={
           <>
-            {/* ALEX NOTES: Could we look to add a filter? */}
-            <Box localStyles={{ width: "auto" }}>
-              {/* <Button size='S' variant='SECONDARY' active onClick={<></>}>Filter by</Button> */}
-            </Box>
+            <Box localStyles={{ width: "auto" }}></Box>
 
             {unstakedNfts && unstakedNfts.length > 0 ? (
               <Button size="S" variant="PRIMARY" onClick={stakeHandler}>
@@ -149,7 +161,6 @@ const Gallery = () => {
                   <div
                     id={i}
                     onClick={() => {
-                      // console.log("selected ", i);
                       if (selectedTokenIds.includes(token.tokenId)) {
                         let _selected = [...selectedTokenIds];
                         _selected = _selected.filter(
@@ -157,7 +168,6 @@ const Gallery = () => {
                         );
                         setSelectedTokenIds(_selected);
                       } else {
-                        console.log("selecting it", token.tokenId);
                         let _selected = [...selectedTokenIds];
                         _selected.push(token.tokenId);
                         setSelectedTokenIds(_selected);
@@ -169,11 +179,11 @@ const Gallery = () => {
                     <div>
                       <img
                         style={{
-                          width: "100px",
+                          width: "150px",
                           borderRadius: "20px",
                           border: selectedTokenIds.includes(token.tokenId)
-                            ? "1px solid white"
-                            : "none",
+                            ? "4px solid yellow"
+                            : "",
                         }}
                         src={
                           "https://ipfs.io/ipfs/" +
