@@ -1,0 +1,14 @@
+ onClick={() => setShowPopup((prev) => !prev)}>Stake</button>
+
+
+    <div className="flex flex-col z-[2]">
+      <div className='flex-1 grid gap-10 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 max-w-[60rem] max-h-[10rem] min-h-[30rem] h-[100%] w-[100%] overflow-y-auto overflow-x-hidden mb-10 mx-auto rounded-lg bg-slate-300 bg-opacity-40 p-10'>
+        {images.map(({ id, alt, name }) => (
+          <div key={id} className='form-group'>
+            <input type="checkbox" hidden name={name} id={name} onClick={() => selectImageHandle(id)} />
+            <label htmlFor={name} className='flex justify-center items-center rounded-[1rem] cursor-pointer p-2'>
+              <img src={name} alt={alt} className='h-[100%] w-[100%] rounded-[1rem]' />
+            </label>
+          </div>
+        ))}
+      </div>

@@ -1,0 +1,39 @@
+{
+  "name": "stacking",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
+    "alchemy-sdk": "^2.2.0",
+    "all": "^0.0.0",
+    "bootstrap": "^5.0.0-beta3",
+    "ethers": "^5.5.4",
+    "moralis": "^2.3.1",
+    "react": "^18.2.0",
+    "react-bootstrap-sweetalert": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-moralis": "^1.4.2",
+    "react-scripts": "5.0.1",
+    "sweetalert2": "^11.4.10",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.1",
+    "autoprefixer": "^10.4.8",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
+    "vite": "^3.0.7"
+  }
+}
